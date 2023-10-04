@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Trail Viewer</title>
+    <link href="style1.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Audit Trail Viewer</h1>
+
+    <!-- Filter Form -->
+    <form id="filter-form">
+        <label for="timestamp-start">Start Timestamp:</label>
+        <input type="datetime-local" id="timestamp-start">
+        <label for="timestamp-end">End Timestamp:</label>
+        <input type="datetime-local" id="timestamp-end">
+        <label for="user-id">User ID:</label>
+        <input type="text" id="user-id">
+        <label for="action">Action:</label>
+        <input type="text" id="action">
+        <label for="entity">Entity:</label>
+        <input type="text" id="entity">
+        <input type="submit" value="Apply Filters">
+    </form>
+
+    <!-- Table to display audit trail data -->
+    <table id="audit-table">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>User ID</th>
+                <th>Action</th>
+                <th>Entity</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody id="audit-data">
+            <!-- Audit trail data will be displayed here -->
+        </tbody>
+    </table>
+
+    <script src="java1.js"></script>
+</body>
+</html>
