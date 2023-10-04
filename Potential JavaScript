@@ -1,0 +1,56 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const filterForm = document.getElementById('filter-form');
+    const auditTable = document.getElementById('audit-table');
+    const auditData = document.getElementById('audit-data');
+
+    // Event listener for form submission
+    filterForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(filterForm);
+
+        try {
+            const response = await fetch('https://run.mocky.io/v3/0d105fe2-0e98-47a6-af35-161b5972035f');
+            const auditTrailData = await response.json();
+            const filteredData = filterAuditData(auditTrailData, formData);
+            displayAuditData(filteredData);
+        } catch (error) {
+            console.error('Error fetching JSON data:', error);
+        }
+    });
+
+    // Function to filter audit trail data based on form input
+    const filterAuditData = (data, formData) => {
+        const timestampStart = formData.get('timestamp-start');
+        const timestampEnd = formData.get('timestamp-end');
+        const userId = formData.get('user-id');
+        const action = formData.get('action');
+        const entity = formData.get('entity');
+
+        return data.filter(entry => {
+            return (!timestampStart || entry.timestamp >= timestampStart) &&
+                   (!timestampEnd || entry.timestamp <= timestampEnd) &&
+                   (!userId || entry.user_id.toLowerCase().includes(userId.toLowerCase())) &&
+                   (!action || entry.action.toLowerCase().includes(action.toLowerCase())) &&
+                   (!entity || entry.entity.toLowerCase().includes(entity.toLowerCase()));
+        });
+    };
+
+    // Function to display audit trail data in the table
+    const displayAuditData = (data) => {
+        const tableBody = document.createElement('tbody');
+        data.forEach(entry => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${entry.timestamp}</td>
+                <td>${entry.user_id}</td>
+                <td>${entry.action}</td>
+                <td>${entry.entity}</td>
+                <td>${entry.details}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+        // Replace the existing table body with the filtered data
+        auditTable.replaceChild(tableBody, auditData);
+        tableBody.id = 'audit-data'; // Set the same ID for the new table body
+    };
+});
